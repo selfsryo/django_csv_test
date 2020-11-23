@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block title %}一覧{% endblock %}
+
+
+{% block content %}
+
+  <h1>飲み物マスタ</h1>
+  <table rules="cols">
+    <thead>
+    <tr>
+      <th>飲み物</th>
+      <th>値段</th>
+      <th>登録日</th>
+    </tr>
+    </thead>
+    <tbody>
+    {# 一覧 #}
+    {% for drink in drinks %}
+      <tr>
+        <td>{{ drink.name }}</td>
+        <td>{{ drink.price|intcomma}}</td>
+        <td>{{ drink.created_at|date:'Y-m-d G:i' }}</td>
+      </tr>
+    {# 1件も登録がない場合 #}
+    {% empty %}
+      <tr>
+        <td class="empty" colspan="3">まだ飲み物は登録されていません</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="text">CSV登録</div>
+  <form action="{% url 'drinks:list' %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    
+    {% for field in form %}
+      <div class="field">
+        {{ field }}
+        <button type="submit" class="uploadbtn">CSVアップロード</button>
+        <br>
+        {% if field.help_text %}
+          <span class="helptext">{{ field.help_text|safe }}</span>
+        {% endif %}
+        <br>
+        {% for error in field.errors %}
+          <p class="error">{{ error }}</p>
+        {% endfor %}
+        <br>
+      </div>
+    {% endfor %}
+  </form>
+
+  <div class="text">CSV出力</div>
+  <div class="download">
+    <a href="{% url 'drinks:download' %}">CSVダウンロード</a>
+  </div>
+
+{% endblock %}

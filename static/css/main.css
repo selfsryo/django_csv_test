@@ -1,0 +1,97 @@
+body {
+  color: #333;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.wrapper {
+  margin: 50px auto;
+  max-width: 960px;
+}
+
+.wrapper > h1 {
+  text-align: center;
+}
+
+
+/* Table */
+
+table > tbody > tr {
+  height: 52px;
+  border-top: solid 1px #eee;
+}
+
+table {
+  border-collapse: collapse;
+  border: solid 1px black;
+  width: 100%;
+}
+
+table > tbody > tr:nth-child(odd) {
+  background: #f9fcff;
+}
+
+th {
+  padding: 8px;
+  color: #000;
+  background: #a9a9a9;
+}
+
+td {
+  padding: 4px 8px;
+  text-align: center;
+}
+
+tr > .empty {
+  text-align: left;
+}
+
+
+/* form */
+
+.field .helptext {
+  font-size: 14px;
+  color: #808080;
+}
+
+.field .error {
+  font-size: 14px;
+  color: #e64040;
+  margin-top: 0;
+}
+
+.errorlist {
+  color: #e64040;
+  margin-top: 36px;
+  list-style: none;
+  padding: 0;
+}
+
+.download {
+  background: transparent;
+  padding: 1px 5px;
+  border: 0.5px solid #000000;
+  box-shadow: 6px 6px 4px 0px rgba(0, 0, 0, 0.25);
+  float: left;
+}
+
+.download a {
+  color: #000;
+  text-decoration: none;
+  font-size: 12px;
+}
+
+.text {
+  margin: 36px auto 8px;
+  font-size: 24px;
+}
+
+.uploadbtn {
+  background: transparent;
+  padding: 3px 5px;
+  border: 0.5px solid #000000;
+  box-shadow: 6px 6px 4px 0px rgba(0, 0, 0, 0.25);
+  font-size: 12px;
+}
+
