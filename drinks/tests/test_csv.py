@@ -51,9 +51,7 @@ class TestCSVUpload(TestCase):
                 f.write('ドリンク1,100\n',)
                 f.seek(0)
                 res = self.client.post(self.url, {'csv_file': f})
-        form = res.context['form']
-        self.assertFalse(form.is_valid())
-        self.assertIn('拡張子.csvのファイルを選択してください。', form.errors['csv_file'])
+        self.assertFormError(res, 'form', 'csv_file', '拡張子.csvのファイルを選択してください。')
 
     def test_over_row_limit(self):
         """指定した行数までしか登録されないことをテスト
@@ -74,9 +72,7 @@ class TestCSVUpload(TestCase):
                 f.write('ドリンク1,100\n',)
             f.seek(0)
             res = self.client.post(self.url, {'csv_file': f})
-        form = res.context['form']
-        self.assertFalse(form.is_valid())
-        self.assertIn(f'ファイルサイズが大きすぎます。{settings.CSV_FILE_SIZE_LIMIT//1000//1000}MBより小さいサイズにしてください。', form.errors['csv_file'])
+        self.assertFormError(res, 'form', 'csv_file', f'ファイルサイズが大きすぎます。{settings.CSV_FILE_SIZE_LIMIT//1000//1000}MBより小さいサイズにしてください。')
 
     def test_too_long_name(self):
         """Drinkモデルのnameフィールド文字数上限のテスト
@@ -91,9 +87,7 @@ class TestCSVUpload(TestCase):
             ])
             f.seek(0)
             res = self.client.post(self.url, {'csv_file': f})
-        form = res.context['form']
-        self.assertFalse(form.is_valid())
-        self.assertIn('2行目の名称を255文字以内にしてください。', form.errors['csv_file'])
+        self.assertFormError(res, 'form', 'csv_file', '2行目の名称を255文字以内にしてください。')
 
     def test_too_cheap_price(self):
         """Drinkモデルのpriceフィールド下限のテスト
@@ -105,9 +99,7 @@ class TestCSVUpload(TestCase):
             ])
             f.seek(0)
             res = self.client.post(self.url, {'csv_file': f})
-        form = res.context['form']
-        self.assertFalse(form.is_valid())
-        self.assertIn('2行目の価格を1以上にしてください。', form.errors['csv_file'])
+        self.assertFormError(res, 'form', 'csv_file', '2行目の価格を1以上にしてください。')
 
     def test_too_expensive_price(self):
         """Drinkモデルのpriceフィールド上限のテスト
@@ -119,9 +111,7 @@ class TestCSVUpload(TestCase):
             ])
             f.seek(0)
             res = self.client.post(self.url, {'csv_file': f})
-        form = res.context['form']
-        self.assertFalse(form.is_valid())
-        self.assertIn('2行目の価格を2,147,483,647以下にしてください。', form.errors['csv_file'])
+        self.assertFormError(res, 'form', 'csv_file', '2行目の価格を2,147,483,647以下にしてください。')
 
     def test_invalid_price(self):
         """Drinkモデルのpriceフィールドの型テスト
@@ -133,9 +123,7 @@ class TestCSVUpload(TestCase):
             ])
             f.seek(0)
             res = self.client.post(self.url, {'csv_file': f})
-        form = res.context['form']
-        self.assertFalse(form.is_valid())
-        self.assertIn('2行目の価格を数字にしてください。', form.errors['csv_file'])
+        self.assertFormError(res, 'form', 'csv_file', '2行目の価格を数字にしてください。')
 
     def test_over_column(self):
         """CSVの列に余剰がないかテスト
@@ -147,9 +135,7 @@ class TestCSVUpload(TestCase):
             ])
             f.seek(0)
             res = self.client.post(self.url, {'csv_file': f})
-        form = res.context['form']
-        self.assertFalse(form.is_valid())
-        self.assertIn('2行目に不要な列があります。', form.errors['csv_file'])
+        self.assertFormError(res, 'form', 'csv_file', '2行目に不要な列があります。')
 
     def test_lack_of_column(self):
         """CSVの列に不足がないかテスト
@@ -161,9 +147,7 @@ class TestCSVUpload(TestCase):
             ])
             f.seek(0)
             res = self.client.post(self.url, {'csv_file': f})
-        form = res.context['form']
-        self.assertFalse(form.is_valid())
-        self.assertIn('2行目に不足している列があります。', form.errors['csv_file'])
+        self.assertFormError(res, 'form', 'csv_file', '2行目に不足している列があります。')
 
 
 class TestCSVDownload(TestCase):
